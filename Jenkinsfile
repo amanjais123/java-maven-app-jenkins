@@ -33,7 +33,7 @@ pipeline {
                 script {
                     buildImage 'amanjais123/java-maven-app-jenkins:3.0'
                     dockerLogin()
-                    dockerPush 'amanjais123/java-maven-app-jenkins3.0'
+                    dockerPush 'amanjais123/java-maven-app-jenkins:3.0'
                 }
             }
         }
