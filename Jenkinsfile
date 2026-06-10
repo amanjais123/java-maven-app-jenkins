@@ -64,19 +64,16 @@ stage('deploy') {
     steps {
         script {
 
-            sshagent(['VM-jenkins']) {
+     sshagent(['VM-jenkins']) {
+    sh '''
+        scp -o StrictHostKeyChecking=no docker-compose.yaml \
+        aman-jaiswal@10.86.61.42:/home/aman-jaiswal/
 
-                sh '''
-                    scp -o StrictHostKeyChecking=no docker-compose.yaml \
-                    aman-jaiswal@10.86.61.42:/home/aman-jaiswal/deployment/
-
-                    ssh -o StrictHostKeyChecking=no \
-                    aman-jaiswal@10.86.61.42 \
-                    "cd /home/aman-jaiswal/deployment && \
-                     docker compose pull && \
-                     docker compose up -d"
-                '''
-            }
+        ssh -o StrictHostKeyChecking=no \
+        aman-jaiswal@10.86.61.42 \
+        "docker compose -f /home/aman-jaiswal/docker-compose.yaml up -d"
+    '''
+}
         }
     }
 }
