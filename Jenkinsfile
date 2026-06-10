@@ -60,23 +60,25 @@ pipeline {
             }
         }
 
-        stage('deploy') {
-            steps {
-                script {
-                    echo 'deploying docker image on VM...'
+stage('deploy') {
+    steps {
+        script {
 
-                    sshagent(['VM-jenkins']) {
+            sshagent(['VM-jenkins']) {
 
-                        sh """
-                            ssh -o StrictHostKeyChecking=no aman-jaiswal@10.86.61.42 '
-                                cd ~/js-app
-                                docker compose pull
-                                docker compose up -d
-                            '
-                        """
-                    }
-                }
+                sh '''
+                    scp -o StrictHostKeyChecking=no docker-compose.yaml \
+                    aman-jaiswal@10.86.61.42:/home/aman-jaiswal/deployment/
+
+                    ssh -o StrictHostKeyChecking=no \
+                    aman-jaiswal@10.86.61.42 \
+                    "cd /home/aman-jaiswal/deployment && \
+                     docker compose pull && \
+                     docker compose up -d"
+                '''
             }
         }
+    }
+}
     }
 }
